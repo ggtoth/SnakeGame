@@ -1,6 +1,7 @@
 package com.ggoth.snakegamematchmaking.User;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ggoth.snakegamematchmaking.Match.Match;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,6 +18,7 @@ import java.util.Objects;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false, unique = true)
   private Long id;
 
   @Column(name = "username", nullable = false, unique = true)
@@ -36,6 +37,10 @@ public class User {
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "queue_joined_at")
   private Instant queueJoinedAt;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "match_id")
+  private Match match;
 
   @Transient
   private boolean queueJoined;
