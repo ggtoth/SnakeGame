@@ -13,14 +13,16 @@ import java.net.URI;
 public class UserController {
 
   private final UserService userService;
+  private final UserRepository userRepository;
 
-  public UserController(UserService userService) {
+  public UserController(UserService userService, UserRepository userRepository) {
     this.userService = userService;
+    this.userRepository = userRepository;
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<User> getUser(@Valid @PathVariable Long id) {
-    User user = userService.getUser(id);
+    User user = userRepository.findUsersById(id);
     if (user == null) {
       return ResponseEntity.notFound().build();
     }

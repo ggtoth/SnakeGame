@@ -1,7 +1,12 @@
 package com.ggoth.snakegamematchmaking.User;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -30,11 +35,6 @@ public class UserService {
     }
 
     user = userRepository.save(user);
-    return user;
-  }
-
-  public User getUser(Long id) {
-    User user = userRepository.getUserById(id);
     return user;
   }
 }
