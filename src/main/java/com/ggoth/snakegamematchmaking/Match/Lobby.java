@@ -11,13 +11,14 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "match")
+@Table(name = "lobbies")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Match {
+public class Lobby {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false, unique = true)
   private Long id;
 
-  @OneToMany(mappedBy = "match", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER)
   List<User> users;
 }

@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Page<User> findAllUsersQueueJoinedAtNotNull(Pageable pageable);
 
   User findUsersById(@Valid Long id);
+
+  List<User> findUsersByUsernameStartingWith(String username);
 }
