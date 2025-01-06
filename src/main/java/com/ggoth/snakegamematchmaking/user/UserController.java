@@ -1,9 +1,8 @@
-package com.ggoth.snakegamematchmaking.User;
+package com.ggoth.snakegamematchmaking.user;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;

@@ -1,9 +1,7 @@
-package com.ggoth.snakegamematchmaking.User;
+package com.ggoth.snakegamematchmaking.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ggoth.snakegamematchmaking.Match.Lobby;
-import com.ggoth.snakegamematchmaking.names.Name;
-import com.ggoth.snakegamematchmaking.names.NamesRepository;
+import com.ggoth.snakegamematchmaking.match.Lobby;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,11 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
-import java.util.Optional;
-import java.util.Random;
 
 @Getter
 @Setter
@@ -32,6 +27,9 @@ public class User {
 
   @Column(name = "username", nullable = false, unique = true)
   private String username;
+
+  @Column(name = "secret", nullable = false, unique = false)
+  private String secret;
 
   @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)

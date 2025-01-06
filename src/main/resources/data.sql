@@ -1,3 +1,6 @@
+-- Adjectives: https://gist.github.com/xeoncross/5381806b18de1f395187
+-- Nouns: https://langeek.co/en/vocab/subcategory/1461/word-list
+-- Combined together in 21k+ possible names
 INSERT INTO names (name) VALUES
     ('AbundantCottonmouth'),
     ('AbundantSerpent'),

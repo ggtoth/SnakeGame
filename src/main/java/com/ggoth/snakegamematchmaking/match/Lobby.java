@@ -1,7 +1,7 @@
-package com.ggoth.snakegamematchmaking.Match;
+package com.ggoth.snakegamematchmaking.match;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ggoth.snakegamematchmaking.User.User;
+import com.ggoth.snakegamematchmaking.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
