@@ -21,4 +21,14 @@ public class Lobby {
 
   @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER)
   List<User> users;
+
+  @Column(name = "capacity", nullable = false)
+  private Integer capacity;
+
+  @Transient
+  private Integer occupancy;
+
+  public Integer getOccupancy() {
+    return users.size() / capacity;
+  }
 }

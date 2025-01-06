@@ -19,15 +19,6 @@ public class UserController {
     this.userRepository = userRepository;
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<User> getUser(@Valid @PathVariable Long id) {
-    User user = userRepository.findUsersById(id);
-    if (user == null) {
-      return ResponseEntity.notFound().build();
-    }
-    return ResponseEntity.ok(user);
-  }
-
   @PostMapping("/register")
   public ResponseEntity<User> register(@Valid @RequestBody UserRegisterRequest request) {
     String username = request.getUsername();
@@ -41,8 +32,6 @@ public class UserController {
     HttpHeaders headers = new HttpHeaders();
     headers.setLocation(location);
 
-    return ResponseEntity.created(location).headers(headers).build();
+    return ResponseEntity.created(location).headers(headers).body(user);
   }
-
-
 }

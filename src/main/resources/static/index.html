@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Match</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js" integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<script>
+    let userdata = null;
+    let sessionId = null;
+    let stompClient = null;
+
+    async function register() {
+        if(userdata == null)
+            await axios.post(
+                `${window.location.href}user/register`,
+                {
+                    username: ""
+                }
+            )
+                .then(response => userdata = response.data)
+                .catch(error => console.error("E:", error));
+    }
+
+
+    async function joinQueue() {
+        await register();
+
+        const socket = new SockJS('/queue');  // The WebSocket endpoint for SockJS
+        stompClient = Stomp.over(socket);
+        // stompClient.debug = function(){};
+
+        await new Promise((resolve, reject) => {
+            stompClient.connect({}, (frame) => {
+                let url = stompClient.ws._transport.url;
+                url = url.replace("ws://localhost:8080/queue/",  "");
+                url = url.replace("/websocket", "");
+                url = url.replace(/^[0-9]+\//, "");
+                sessionId = url;
+
+                // Subscribe to the WebSocket channel
+                stompClient.subscribe("/user/" + sessionId + "/join/reply", (messageOutput) => {
+                    userdata = JSON.parse(messageOutput.body).body;
+                    document.getElementById('status').innerText = "Connected to queue";
+                    document.getElementById('user-data').innerText = JSON.stringify(userdata);
+                });
+
+                resolve();
+            }, (error) => {
+                console.error('WebSocket Error: ', error);
+                reject(error);
+            });
+        });
+
+        stompClient.send("/join", {}, JSON.stringify(userdata));
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('register-button').addEventListener('click', register);
+        document.getElementById('join-button').addEventListener('click', joinQueue);
+    });
+</script>
+
+<button id="register-button">Register</button>
+<button id="join-button">Join Queue</button>
+
+<p id="status">Waiting for action...</p>
+<p id="user-data"></p>
+</body>
+</html>
