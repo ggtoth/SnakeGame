@@ -43,6 +43,22 @@ public class QueueController {
         response);
   }
 
+  @MessageMapping("/leave")
+  public void leaveQueue(@Payload User user, @Header("simpSessionId") String sessionId) {
+    User queuedUser = queueService.queueDown(user);
+    ResponseEntity<User> response;
+    if (queuedUser != null) {
+      response = ResponseEntity.ok(queuedUser);
+    }
+    else {
+      response = ResponseEntity.notFound().build();
+    }
+    messagingTemplate.convertAndSendToUser(
+        sessionId,
+        "/leave/reply",
+        response);
+  }
+
   @EventListener
   public void handleDisconnect(SessionDisconnectEvent event){
     String sessionId = event.getSessionId();

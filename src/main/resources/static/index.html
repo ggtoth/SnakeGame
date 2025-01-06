@@ -24,6 +24,7 @@
             )
                 .then(response => userdata = response.data)
                 .catch(error => console.error("E:", error));
+        document.getElementById('user-data').innerText = JSON.stringify(userdata, null, 2);
     }
 
 
@@ -42,11 +43,17 @@
                 url = url.replace(/^[0-9]+\//, "");
                 sessionId = url;
 
-                // Subscribe to the WebSocket channel
                 stompClient.subscribe("/user/" + sessionId + "/join/reply", (messageOutput) => {
                     userdata = JSON.parse(messageOutput.body).body;
                     document.getElementById('status').innerText = "Connected to queue";
-                    document.getElementById('user-data').innerText = JSON.stringify(userdata);
+                    document.getElementById('user-data').innerText = JSON.stringify(userdata, null, 2);
+                });
+
+                stompClient.subscribe("/user/" + sessionId + "/leave/reply", (messageOutput) => {
+                    userdata = JSON.parse(messageOutput.body).body;
+                    document.getElementById('status').innerText = "Waiting for action...";
+                    document.getElementById('user-data').innerText = JSON.stringify(userdata, null, 2);
+                    stompClient.disconnect();
                 });
 
                 resolve();
@@ -59,15 +66,21 @@
         stompClient.send("/join", {}, JSON.stringify(userdata));
     }
 
+    async function leaveQueue() {
+        stompClient.send("/leave", {}, JSON.stringify(userdata));
+    }
+
 
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('register-button').addEventListener('click', register);
         document.getElementById('join-button').addEventListener('click', joinQueue);
+        document.getElementById('leave-button').addEventListener('click', leaveQueue);
     });
 </script>
 
 <button id="register-button">Register</button>
 <button id="join-button">Join Queue</button>
+<button id="leave-button">Leave Queue</button>
 
 <p id="status">Waiting for action...</p>
 <p id="user-data"></p>

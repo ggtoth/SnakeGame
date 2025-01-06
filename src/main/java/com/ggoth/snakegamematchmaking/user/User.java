@@ -19,6 +19,8 @@ import java.time.Instant;
 @Entity
 @Table(name = "users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+
+// TODO Need to save here the queue session ID for basic auth
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

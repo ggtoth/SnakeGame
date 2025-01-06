@@ -31,4 +31,16 @@ public class QueueService {
     }
     return null;
   }
+
+  @Transactional
+  public User queueDown(User user){
+    User foundUser = userRepository.findUsersById(user.getId());
+
+    if (foundUser != null) {
+      foundUser.setQueueJoinedAt(null);
+      foundUser = userRepository.save(foundUser);
+      return userRepository.findUsersById(foundUser.getId());
+    }
+    return null;
+  }
 }
