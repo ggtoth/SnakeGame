@@ -15,15 +15,27 @@
     let stompClient = null;
 
     async function register() {
-        if(userdata == null)
+        if(userdata == null) {
+            let location = null;
+            let secret = null;
             await axios.post(
                 `${window.location.href}user/register`,
                 {
                     username: ""
                 }
             )
+                .then(response => {
+                    location = response.headers.location;
+                    secret = response.headers.secret;
+                })
+                .catch(error => console.error("E:", error));
+
+            await axios.get(
+                `${window.location.href}${location.replace(/^\//, '')}?secret=${secret}`,
+            )
                 .then(response => userdata = response.data)
                 .catch(error => console.error("E:", error));
+        }
         document.getElementById('user-data').innerText = JSON.stringify(userdata, null, 2);
     }
 

@@ -20,7 +20,6 @@ import java.time.Instant;
 @Table(name = "users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-// TODO Need to save here the queue session ID for basic auth
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +49,9 @@ public class User {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "lobby_id")
   private Lobby lobby;
+
+  @Column(name = "queue_session_id", unique = true)
+  private String queueSessionId;
 
   @Transient
   private boolean queueJoined;

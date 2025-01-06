@@ -29,6 +29,7 @@ public class QueueController {
 
   @MessageMapping("/join")
   public void joinQueue(@Payload User user, @Header("simpSessionId") String sessionId) {
+    user.setQueueSessionId(sessionId);
     User queuedUser = queueService.queueUp(user);
     ResponseEntity<User> response;
     if (queuedUser != null) {
@@ -62,6 +63,6 @@ public class QueueController {
   @EventListener
   public void handleDisconnect(SessionDisconnectEvent event){
     String sessionId = event.getSessionId();
-
+    queueService.queueDisconnect(sessionId);
   }
 }
