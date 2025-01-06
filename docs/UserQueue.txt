@@ -1,0 +1,38 @@
+title UserQueue
+
+participant User
+participant QueueService
+participant Database
+
+activate User
+User->QueueService:POST /user/register
+activate QueueService
+QueueService->Database:record new user
+User<--QueueService: location /user/{id} with token
+deactivate QueueService
+
+User->QueueService:GET /user/{id} with token
+activate QueueService
+QueueService->Database:get user
+User<--QueueService: userdata
+deactivate QueueService
+
+User->QueueService:UPGRADE /queue/
+activate QueueService
+
+User->QueueService:WS subscribe /user/join/reply
+User->QueueService:WS subscribe /user/leave/reply
+User->QueueService:WS subscribe /user/game/reply
+
+User->QueueService:WS send /join with userdata
+QueueService->Database: record user queue join
+QueueService->User:WS send /user/join/reply with updated userdata
+
+alt userLeave
+User->QueueService:WS send /leave with userdata
+QueueService->Database: record user queue leave
+QueueService->User:WS send /user/leave/reply with updated userdata
+else userDisconnect
+User->QueueService:WS disconnected
+QueueService->Database: record user queue leave
+end

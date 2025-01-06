@@ -1,0 +1,54 @@
+title UserGame
+
+participant User
+participant LobbyService
+participant Database
+participant QueueService
+
+
+User->QueueService:UserJoinQueue
+activate User
+activate QueueService
+
+
+activate LobbyService
+LobbyService->Database: check occupancy
+
+alt vacancy
+
+LobbyService->Database: pop first user from queue and add to players
+LobbyService->QueueService: notify with lobby id
+deactivate LobbyService
+
+QueueService->User: WS send /user/game/reply with lobby url
+User->QueueService:userLeave
+deactivate QueueService
+destroyafter QueueService
+
+User->LobbyService: UPGRADE /game/{lobby}
+activate LobbyService
+User->LobbyService:WS subscribe /topic/gameState/
+User->LobbyService:WS subscribe /user/userGameState/reply
+
+loop playerConnected
+  LobbyService->User: WS send /topic/gameState gameState
+  User->LobbyService: WS send /userState userState
+end
+
+
+alt userLeave
+User->LobbyService:WS send /leave with userdata
+LobbyService->Database: record user game leave
+else userDisconnect
+User->LobbyService:WS disconnected
+LobbyService->Database: record user game leave
+deactivate LobbyService
+destroyafter Database
+end
+deactivateafter User
+destroyafter User
+
+end
+
+destroyafter LobbyService
+else
