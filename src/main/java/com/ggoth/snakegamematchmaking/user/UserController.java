@@ -22,7 +22,7 @@ public class UserController {
 
   // TODO make this use spring security instead
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUser(@Valid @PathVariable Long id, @Valid @RequestParam String secret) {
+  public ResponseEntity<User> getUser(@Valid @PathVariable Long id, @RequestHeader("Secret") String secret) {
     Optional<User> user = userRepository.findById(id);
     if (user.isPresent()) {
       if (user.get().getSecret().equals(secret)) {
@@ -44,7 +44,7 @@ public class UserController {
     URI location = URI.create("/user/" + user.getId());
     HttpHeaders headers = new HttpHeaders();
     headers.setLocation(location);
-    headers.set("secret", user.getSecret());
+    headers.set("Secret", user.getSecret());
 
     return ResponseEntity.created(location).headers(headers).build();
   }

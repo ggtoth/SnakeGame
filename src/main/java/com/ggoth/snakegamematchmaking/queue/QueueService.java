@@ -26,6 +26,9 @@ public class QueueService {
     User foundUser = userRepository.findUsersById(user.getId());
 
     if (foundUser != null && Objects.equals(user.getSecret(), foundUser.getSecret())) {
+      if(foundUser.isQueueJoined()){
+        return foundUser;
+      }
       foundUser.setQueueJoinedAt(Instant.now());
       foundUser.setQueueSessionId(user.getQueueSessionId());
       foundUser = userRepository.save(foundUser);

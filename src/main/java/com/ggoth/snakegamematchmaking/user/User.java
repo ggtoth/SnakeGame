@@ -29,7 +29,7 @@ public class User {
   @Column(name = "username", nullable = false, unique = true)
   private String username;
 
-  @Column(name = "secret", nullable = false, unique = false)
+  @Column(name = "secret", nullable = false, unique = false, updatable = false)
   private String secret;
 
   @CreationTimestamp

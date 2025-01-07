@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Match</title>
+    <title>Game Queue</title>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js" integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -11,13 +11,16 @@
 <body>
 <script>
     let userdata = null;
+
+    // TODO these 2 should be saved into cookies or local storage
+    let userLocation = null;
+    let secret = null;
+
     let sessionId = null;
     let stompClient = null;
 
     async function register() {
-        if(userdata == null) {
-            let location = null;
-            let secret = null;
+        if(userLocation == null || secret == null) {
             await axios.post(
                 `${window.location.href}user/register`,
                 {
@@ -25,17 +28,29 @@
                 }
             )
                 .then(response => {
-                    location = response.headers.location;
+                    userLocation = response.headers.location;
                     secret = response.headers.secret;
                 })
                 .catch(error => console.error("E:", error));
-
-            await axios.get(
-                `${window.location.href}${location.replace(/^\//, '')}?secret=${secret}`,
-            )
-                .then(response => userdata = response.data)
-                .catch(error => console.error("E:", error));
         }
+
+
+        await axios.get(
+            `${window.location.origin}/${userLocation.replace(/^\//, '')}`, // Construct the URL without the query parameter
+            {
+                headers: {
+                    Secret: secret, // Add the secret in the headers
+                },
+            }
+        )
+            .then(response => userdata = response.data)
+            .catch(error => {
+                userLocation = null;
+                secret = null;
+                userdata = null;
+                register();
+            });
+
         document.getElementById('user-data').innerText = JSON.stringify(userdata, null, 2);
     }
 
