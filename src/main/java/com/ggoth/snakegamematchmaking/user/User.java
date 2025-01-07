@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
@@ -43,13 +44,13 @@ public class User {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  @OneToOne
+  @OneToOne(fetch = FetchType.EAGER)
   private QueuedUser queuedUser;
 
   @Transient
   private boolean queueJoined;
 
   public boolean isQueueJoined() {
-      return queuedUser.getJoinedAt() != null;
+      return queuedUser != null;
   }
 }

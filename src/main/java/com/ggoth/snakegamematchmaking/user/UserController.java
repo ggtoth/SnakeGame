@@ -24,12 +24,14 @@ public class UserController {
   @GetMapping("/{id}")
   public ResponseEntity<User> getUser(@Valid @PathVariable Long id, @RequestHeader("Secret") String secret) {
     Optional<User> user = userRepository.findById(id);
-    if (user.isPresent()) {
-      if (user.get().getSecret().equals(secret)) {
-        return ResponseEntity.ok(user.get());
-      }
+    if(user.isEmpty())
+      return ResponseEntity.notFound().build();
+
+    if (!user.get().getSecret().equals(secret)) {
+      return  ResponseEntity.notFound().build();
     }
-    return ResponseEntity.notFound().build();
+
+    return ResponseEntity.ok(user.get());
   }
 
   @PostMapping("/register")

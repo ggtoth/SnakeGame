@@ -11,14 +11,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-  User findUserByUsername(String username);
-
-  @Query("SELECT u FROM User u WHERE u.queueJoinedAt IS NOT NULL ORDER BY u.queueJoinedAt ASC")
-  Page<User> findAllUsersQueueJoinedAtNotNull(Pageable pageable);
-
-  User findUsersById(@Valid Long id);
-
   List<User> findUsersByUsernameStartingWith(String username);
 
-  User findUserByQueueSessionId(String sessionId);
+  User findUserById(Long userId);
 }

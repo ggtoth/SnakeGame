@@ -2,10 +2,14 @@ package com.ggoth.snakegamematchmaking.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Embeddable
 public class UserLobbyId implements Serializable {
 
@@ -23,8 +27,6 @@ public class UserLobbyId implements Serializable {
     this.lobbyId = lobbyId;
     this.userId = userId;
   }
-
-  // Getters and setters
 
   @Override
   public boolean equals(Object o) {

@@ -90,7 +90,7 @@
             });
         });
 
-        stompClient.send("/join", {}, JSON.stringify(userdata));
+        stompClient.send(`/join/${userdata.id}/1`, {"Secret": secret}, JSON.stringify(""));
     }
 
     async function leaveQueue() {
