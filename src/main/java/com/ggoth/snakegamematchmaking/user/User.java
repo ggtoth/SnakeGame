@@ -1,7 +1,8 @@
 package com.ggoth.snakegamematchmaking.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ggoth.snakegamematchmaking.match.Lobby;
+import com.ggoth.snakegamematchmaking.lobby.Lobby;
+import com.ggoth.snakegamematchmaking.queue.QueuedUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,21 +43,13 @@ public class User {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "queue_joined_at")
-  private Instant queueJoinedAt;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "lobby_id")
-  private Lobby lobby;
-
-  @Column(name = "queue_session_id", unique = true)
-  private String queueSessionId;
+  @OneToOne
+  private QueuedUser queuedUser;
 
   @Transient
   private boolean queueJoined;
 
   public boolean isQueueJoined() {
-      return queueJoinedAt != null;
+      return queuedUser.getJoinedAt() != null;
   }
 }

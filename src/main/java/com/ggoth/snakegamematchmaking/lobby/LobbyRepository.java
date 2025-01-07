@@ -1,4 +1,4 @@
-package com.ggoth.snakegamematchmaking.match;
+package com.ggoth.snakegamematchmaking.lobby;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
