@@ -44,7 +44,7 @@ public class User {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  @OneToOne(fetch = FetchType.EAGER)
+  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
   private QueuedUser queuedUser;
 
   @Transient

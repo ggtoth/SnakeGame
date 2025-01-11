@@ -20,7 +20,7 @@ public class Lobby {
   @Column(name = "id", nullable = false, unique = true)
   private Long id;
 
-  @OneToMany(mappedBy = "lobby")
+  @OneToMany(mappedBy = "lobby", cascade = CascadeType.ALL, orphanRemoval = true)
   List<QueuedUser> queuedUsers;
 
   @Column(name = "capacity", nullable = false)

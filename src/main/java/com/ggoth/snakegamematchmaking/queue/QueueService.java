@@ -41,7 +41,7 @@ public class QueueService {
       return null;
 
     if(user.isQueueJoined())
-      return null;
+      return user;
 
     QueuedUser queuedUser = new QueuedUser();
 
@@ -56,14 +56,29 @@ public class QueueService {
     user.setQueuedUser(queuedUser);
     user = userRepository.save(user);
 
-    return userRepository.findById(user.getId()).orElse(null);
+    return user;
   }
 
   @Transactional
-  public User queueDown(User user){
-    return null;
+  public User queueDown(Long userId, String secret){
+    Optional<User> optionalUser = userRepository.findById(userId);
+    if(optionalUser.isEmpty())
+      return null;
+
+    User user = optionalUser.get();
+
+    // TODO do this with spring security!!!
+    if (!user.getSecret().equals(secret))
+      return null;
+
+    user.setQueuedUser(null);
+
+    return user;
   }
 
+  @Transactional
   public void queueDisconnect(String sessionId){
+    Optional<QueuedUser> queuedUser = queuedUserRepository.findByWsSessionId(sessionId);
+    queuedUser.ifPresent(queuedUserRepository::delete);
   }
 }

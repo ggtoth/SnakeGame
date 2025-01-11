@@ -94,7 +94,7 @@
     }
 
     async function leaveQueue() {
-        stompClient.send("/leave", {}, JSON.stringify(userdata));
+        stompClient.send(`/leave/${userdata.id}`, {"Secret": secret}, JSON.stringify(""));
     }
 
 

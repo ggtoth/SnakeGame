@@ -47,9 +47,9 @@ public class QueueController {
         response);
   }
 
-  @MessageMapping("/leave")
-  public void leaveQueue(@Payload User user, @Header("simpSessionId") String sessionId) {
-    User queuedUser = queueService.queueDown(user);
+  @MessageMapping("/leave/{userId}")
+  public void leaveQueue(@DestinationVariable Long userId, @Header("Secret") String secret, @Header("simpSessionId") String sessionId, @Payload String message) {
+    User queuedUser = queueService.queueDown(userId, secret);
     ResponseEntity<User> response;
     if (queuedUser != null) {
       response = ResponseEntity.ok(queuedUser);
