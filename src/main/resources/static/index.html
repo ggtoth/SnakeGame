@@ -29,17 +29,17 @@
             )
                 .then(response => {
                     userLocation = response.headers.location;
-                    secret = response.headers.secret;
+                    secret = response.headers["x-user-secret"];
                 })
                 .catch(error => console.error("E:", error));
         }
 
 
         await axios.get(
-            `${window.location.origin}/${userLocation.replace(/^\//, '')}`, // Construct the URL without the query parameter
+            `${window.location.origin}/${userLocation.replace(/^\//, '')}`,
             {
                 headers: {
-                    Secret: secret, // Add the secret in the headers
+                    "x-user-secret": secret,
                 },
             }
         )
@@ -90,11 +90,11 @@
             });
         });
 
-        stompClient.send(`/join/${userdata.id}/1`, {"Secret": secret}, JSON.stringify(""));
+        stompClient.send(`/join/${userdata.id}/1`, {"x-user-secret": secret}, JSON.stringify(""));
     }
 
     async function leaveQueue() {
-        stompClient.send(`/leave/${userdata.id}`, {"Secret": secret}, JSON.stringify(""));
+        stompClient.send(`/leave/${userdata.id}`, {"x-user-secret": secret}, JSON.stringify(""));
     }
 
 

@@ -32,7 +32,7 @@ public class QueueController {
   }
 
   @MessageMapping("/join/{userId}/{lobbyId}")
-  public void joinQueue(@DestinationVariable Long userId, @DestinationVariable Long lobbyId, @Header("Secret") String secret, @Header("simpSessionId") String sessionId, @Payload String message) {
+  public void joinQueue(@DestinationVariable Long userId, @DestinationVariable Long lobbyId, @Header("x-user-secret") String secret, @Header("simpSessionId") String sessionId, @Payload String message) {
     User queuedUser = queueService.queueUp(userId, lobbyId, secret, sessionId);
     ResponseEntity<User> response;
     if (queuedUser != null) {
@@ -48,7 +48,7 @@ public class QueueController {
   }
 
   @MessageMapping("/leave/{userId}")
-  public void leaveQueue(@DestinationVariable Long userId, @Header("Secret") String secret, @Header("simpSessionId") String sessionId, @Payload String message) {
+  public void leaveQueue(@DestinationVariable Long userId, @Header("x-user-secret") String secret, @Header("simpSessionId") String sessionId, @Payload String message) {
     User queuedUser = queueService.queueDown(userId, secret);
     ResponseEntity<User> response;
     if (queuedUser != null) {
