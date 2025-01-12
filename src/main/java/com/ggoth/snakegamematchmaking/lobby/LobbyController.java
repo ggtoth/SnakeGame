@@ -1,12 +1,11 @@
 package com.ggoth.snakegamematchmaking.lobby;
 
+import com.ggoth.snakegamematchmaking.player.Player;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/lobby")
@@ -31,5 +30,16 @@ public class LobbyController {
         )
     );
     return ResponseEntity.ok(pagedModel);
+  }
+
+  @PostMapping("/join/{lobbyId}")
+  public ResponseEntity<Player> joinLobby(@PathVariable("lobbyId") Long lobbyId, @RequestBody LobbyJoinRequest joinRequest) {
+    try{
+      Player joinedPlayer = lobbyService.joinlobby(lobbyId, joinRequest);
+      return ResponseEntity.ok(joinedPlayer);
+    }
+    catch(Exception e){
+      return ResponseEntity.notFound().build();
+    }
   }
 }

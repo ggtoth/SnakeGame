@@ -1,5 +1,6 @@
 package com.ggoth.snakegamematchmaking.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ggoth.snakegamematchmaking.lobby.Lobby;
 import com.ggoth.snakegamematchmaking.player.Player;
@@ -31,6 +32,8 @@ public class User {
   @Column(name = "username", nullable = false, unique = true)
   private String username;
 
+  // TODO this is not really safe is it?
+  @JsonIgnore
   @Column(name = "secret", nullable = false, unique = false, updatable = false)
   private String secret;
 
@@ -44,13 +47,14 @@ public class User {
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
   private Player player;
 
   @Transient
   private boolean playing;
 
-  public boolean isPlaying() {
-      return player != null;
+  @PostLoad
+  private void postLoad() {
+    this.playing = player != null;
   }
 }

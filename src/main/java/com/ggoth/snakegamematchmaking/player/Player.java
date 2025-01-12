@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ggoth.snakegamematchmaking.lobby.Lobby;
 import com.ggoth.snakegamematchmaking.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "players")
 public class Player {
