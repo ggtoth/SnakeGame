@@ -1,4 +1,4 @@
-package com.ggoth.snakegamematchmaking.user;
+package com.ggoth.snakegamematchmaking.player;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

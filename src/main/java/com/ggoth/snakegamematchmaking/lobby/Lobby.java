@@ -1,7 +1,7 @@
 package com.ggoth.snakegamematchmaking.lobby;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ggoth.snakegamematchmaking.queue.QueuedUser;
+import com.ggoth.snakegamematchmaking.player.Player;
 import com.ggoth.snakegamematchmaking.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class Lobby {
   private Long id;
 
   @OneToMany(mappedBy = "lobby", cascade = CascadeType.ALL, orphanRemoval = true)
-  List<QueuedUser> queuedUsers;
+  List<Player> players;
 
   @Column(name = "capacity", nullable = false)
   private Integer capacity;

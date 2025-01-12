@@ -36,6 +36,7 @@ dependencies {
     implementation 'org.apache.kafka:kafka-streams'
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     compileOnly  'org.projectlombok:lombok'
     annotationProcessor   'org.projectlombok:lombok'

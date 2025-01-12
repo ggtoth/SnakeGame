@@ -2,7 +2,7 @@ package com.ggoth.snakegamematchmaking.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ggoth.snakegamematchmaking.lobby.Lobby;
-import com.ggoth.snakegamematchmaking.queue.QueuedUser;
+import com.ggoth.snakegamematchmaking.player.Player;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,12 +45,12 @@ public class User {
   private Instant updatedAt;
 
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private QueuedUser queuedUser;
+  private Player player;
 
   @Transient
-  private boolean queueJoined;
+  private boolean playing;
 
-  public boolean isQueueJoined() {
-      return queuedUser != null;
+  public boolean isPlaying() {
+      return player != null;
   }
 }

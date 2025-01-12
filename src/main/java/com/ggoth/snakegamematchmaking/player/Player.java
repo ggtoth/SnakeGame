@@ -1,23 +1,17 @@
-package com.ggoth.snakegamematchmaking.queue;
+package com.ggoth.snakegamematchmaking.player;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ggoth.snakegamematchmaking.lobby.Lobby;
 import com.ggoth.snakegamematchmaking.user.User;
-import com.ggoth.snakegamematchmaking.user.UserLobbyId;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "queued_users")
-public class QueuedUser {
+@Table(name = "players")
+public class Player {
   @EmbeddedId
   @Column(unique = true, nullable = false)
   private UserLobbyId id;
@@ -33,9 +27,6 @@ public class QueuedUser {
   @MapsId("userId")
   @JoinColumn(name = "user_id")
   private User user;
-
-  @Column(name = "ws_session_id")
-  private String wsSessionId;
 
   @Temporal(TemporalType.TIMESTAMP)
   @CreationTimestamp
